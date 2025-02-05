@@ -9,17 +9,23 @@ class Card:
         tool = "Tool"
         mystical = "Mystical"
 
-    def __init__(self, name: str, type: Type, cost: int, power: int):
+    def __init__(self, name: str, type: Type, cost: int, power: int, player_card: bool):
         self.name = name
         self.cost = cost
         self.power = power
         self.type = type
+        self.player_card = player_card
 
     def __str__(self):
         return self.name + " " + self.type + " C:" + str(self.cost) + " P:" + str(self.power)
 
     def display_card(self, pos_x, pos_y, width, selected, screen):
         
+        if self.player_card:
+            color = (119, 168, 247)
+        else:
+            color = (255, 107, 107)
+
         height = width * board.Board.card_height_width_ratio
         mouse_x, mouse_y = pygame.mouse.get_pos()
         if mouse_x > pos_x and mouse_x < pos_x + width and mouse_y > pos_y and mouse_y < pos_y + height:
@@ -31,7 +37,7 @@ class Card:
         if selected:
             pygame.draw.rect(screen, (0,255,0), (pos_x-width*0.05/2, pos_y-height*0.05/2, width*1.05, height*1.05))
 
-        pygame.draw.rect(screen, (200,200,200), (pos_x, pos_y, width, height))
+        pygame.draw.rect(screen, color, (pos_x, pos_y, width, height))
         font = pygame.font.SysFont("Arial", int(width/6))
         name = font.render(self.name, True, (0,0,0))
         name_w, name_h = font.size(self.name)

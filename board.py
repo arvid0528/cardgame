@@ -1,11 +1,11 @@
 import pygame # type: ignore
 import random
-from globals import *
+import globals
 import hand
 
 class Board:
 
-    card_height_width_ratio = 1.6
+    card_height_width_ratio = 1.4
 
     def __init__(self, player_hand: hand.Hand, cpu_hand: hand.Hand, grid: list):
         self.player_hand = player_hand
@@ -17,7 +17,7 @@ class Board:
     def get_random_free_space(self):
         row = random.randint(0, self.rows-1)
         col = random.randint(0, self.cols-1)
-        if self.grid[col][row] == None:
+        if self.grid[row][col] == None:
             return row, col
         return self.get_random_free_space()
 
@@ -33,18 +33,18 @@ class Board:
         self.grid[col][row] = player_card
 
     def cpu_turn(self):
-        print("cpu turn\n")
         row, col = self.get_random_free_space()
         card = self.cpu_hand.play_random_card()
 
         self.grid[row][col] = card
+        globals.players_turn = True
 
     def display_grid(self, screen):
-        card_width = SCREEN_WIDTH*0.07
+        card_width = globals.SCREEN_WIDTH*0.07
         card_height = card_width * Board.card_height_width_ratio
 
-        pos_x = SCREEN_WIDTH/2 - card_width*1.1*self.cols/2
-        pos_y = SCREEN_HEIGHT/2 - card_height*1.1*self.rows/2
+        pos_x = globals.SCREEN_WIDTH/2 - card_width*1.1*self.cols/2
+        pos_y = globals.SCREEN_HEIGHT/2 - card_height*1.1*self.rows/2
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
@@ -55,10 +55,12 @@ class Board:
                 if mouse_x > rel_x and mouse_x < rel_x + card_width and mouse_y > rel_y and mouse_y < rel_y + card_height:
                     pygame.draw.rect(screen, (150,150,150), (rel_x, rel_y, card_width, card_height))
 
-                    if players_turn and pygame.mouse.get_pressed()[0] and self.player_hand.selected_card_index is not None:
+                    if globals.players_turn and pygame.mouse.get_pressed()[0] and self.player_hand.selected_card_index is not None:
                         card = self.player_hand.play_card(self.player_hand.selected_card_index, row, col)
                         self.grid[row][col] = card
                         self.player_hand.selected_card_index = None
+                        globals.players_turn = False
+                        print("player turn done")
 
                 else:
                     pygame.draw.rect(screen, (100,100,100), (rel_x, rel_y, card_width, card_height))
