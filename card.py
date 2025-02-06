@@ -5,13 +5,14 @@ import board
 class Card:
 
     class Type:
-        animal = "Animal"
+        predator = "Predator"
+        prey = "Prey"
         tool = "Tool"
         mystical = "Mystical"
 
-    def __init__(self, name: str, type: Type, cost: int, power: int, player_card: bool):
+    def __init__(self, name: str, type: Type, hunger: int, power: int, player_card: bool):
         self.name = name
-        self.cost = cost
+        self.hunger = hunger
         self.power = power
         self.type = type
         self.player_card = player_card
@@ -53,9 +54,9 @@ class Card:
         
         cost_box_x = pos_x+width-width*0.1/2-width*0.25
         cost_box_y = pos_y + height*0.1 + name_h
-        cost_w, cost_h = font.size(str(self.cost))
+        cost_w, cost_h = font.size(str(self.hunger))
         pygame.draw.rect(screen, (255, 255, 100), (cost_box_x, cost_box_y, width*0.25, width*0.25))
-        power = font.render(str(self.cost), True, (0,0,0))
+        power = font.render(str(self.hunger), True, (0,0,0))
         screen.blit(power, ((cost_box_x + width*0.25/2 - cost_w/2, cost_box_y+width*0.25/2-cost_h/2, width*0.25, width*0.25)))
 
         type_font = pygame.font.SysFont("Arial", int(width/8))

@@ -8,13 +8,19 @@ import globals
 
 def main():
 
-    player_wolf = Card("Wolf", Card.Type.animal, 3, 4, True)
-    player_sheep = Card("Sheep", Card.Type.animal, 1, 2, True)
-    cpu_wolf = Card("Wolf", Card.Type.animal, 3, 4, False)
-    cpu_sheep = Card("Sheep", Card.Type.animal, 1, 2, False)
-
-    player_hand = Hand([player_wolf, player_wolf, player_sheep, player_sheep, player_sheep])
-    cpu_hand = Hand([cpu_wolf, cpu_sheep, cpu_sheep, cpu_sheep, cpu_sheep])
+    player_hand = Hand([
+        Card("Wolf", Card.Type.predator, 3, 4, True), 
+        Card("Wolf", Card.Type.predator, 3, 4, True), 
+        Card("Sheep", Card.Type.prey, 1, 2, True), 
+        Card("Sheep", Card.Type.prey, 1, 2, True),
+        Card("Sheep", Card.Type.prey, 1, 2, True)])
+    
+    cpu_hand = Hand([
+        Card("Wolf", Card.Type.predator, 3, 4, False),
+        Card("Sheep", Card.Type.prey, 1, 2, False),
+        Card("Sheep", Card.Type.prey, 1, 2, False),
+        Card("Sheep", Card.Type.prey, 1, 2, False),
+        Card("Sheep", Card.Type.prey, 1, 2, False)])
 
     cols = 8
     rows = 3
@@ -39,7 +45,7 @@ def main():
         board.display_grid(screen)
         board.player_hand.display_hand(screen)
 
-        if not globals.players_turn:
+        if globals.phase == "cpu turn":
             board.cpu_turn()
 
         pygame.display.flip()   
