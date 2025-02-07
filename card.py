@@ -1,6 +1,7 @@
 import pygame # type: ignore
 import util
 import board 
+import time
 
 class Card:
 
@@ -20,8 +21,18 @@ class Card:
     def __str__(self):
         return self.name + " " + self.type + " C:" + str(self.cost) + " P:" + str(self.power)
 
+    def eaten_animation(self, screen):
+        #self.display_card(self.x, self.y, self.width, False, screen)
+        pygame.draw.rect(screen, (255,0,0), (self.x, self.y+self.height*0.7, self.width/2, self.height*0.3))
+        time.sleep(1)
+
+
     def display_card(self, pos_x, pos_y, width, selected, screen):
-        
+        self.x = pos_x
+        self.y = pos_y
+        self.width = width
+        self.height = width * board.Board.card_height_width_ratio
+
         if self.player_card:
             color = (119, 168, 247)
         else:

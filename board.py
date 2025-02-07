@@ -4,6 +4,8 @@ import globals
 import hand
 import card
 import util
+import asyncio
+import time
 
 class Board:
 
@@ -35,18 +37,20 @@ class Board:
 
         self.grid[col][row] = player_card
 
-    def cpu_turn(self):
+    def cpu_turn(self, screen):
         row, col = self.get_random_free_space()
         card = self.cpu_hand.play_random_card()
 
         self.grid[row][col] = card
         globals.players_turn = True
         globals.phase = "cpu resolve"
-        self.resolve()
+        asyncio.create_task(self.resolve(screen))
 
-    def resolve(self):
+    async def resolve(self, screen):
+    
+        
+        await asyncio.sleep(2)
 
-        #resolve
         for row in range(self.rows):
             for col in range(self.cols):
                 grid_card = self.grid[row][col]
@@ -56,6 +60,7 @@ class Board:
                     if grid_card.type == card.Card.Type.predator:
                         if grid_card.hunger <= 1:
                             if left_card is not None and left_card.type == card.Card.Type.prey:
+                                left_card.eaten_animation(screen)
                                 grid_card.power = grid_card.power + left_card.power
                                 self.grid[row][col-1] = None
                                 grid_card.hunger = 4
@@ -96,7 +101,7 @@ class Board:
                         self.player_hand.selected_card_index = None
                         globals.players_turn = False
                         globals.phase = "player resolve"
-                        self.resolve()
+                        asyncio.create_task(self.resolve(screen))
 
                 else:
                     pygame.draw.rect(screen, (100,100,100), (rel_x, rel_y, card_width, card_height))

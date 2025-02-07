@@ -5,8 +5,9 @@ from board import Board
 from hand import Hand
 from card import Card
 import globals
+import asyncio
 
-def main():
+async def main():
 
     player_hand = Hand([
         Card("Wolf", Card.Type.predator, 3, 4, True), 
@@ -44,9 +45,11 @@ def main():
 
         board.display_grid(screen)
         board.player_hand.display_hand(screen)
+        
+        await asyncio.sleep(0)
 
         if globals.phase == "cpu turn":
-            board.cpu_turn()
+            board.cpu_turn(screen)
 
         pygame.display.flip()   
 
@@ -54,4 +57,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    asyncio.run(main())
