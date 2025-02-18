@@ -60,13 +60,14 @@ class Board:
                     if grid_card.type == card.Card.Type.predator:
                         if grid_card.hunger <= 1:
                             if left_card is not None and left_card.type == card.Card.Type.prey:
-                                left_card.eaten_animation(screen)
+                                left_card.getting_eaten = True
                                 grid_card.power = grid_card.power + left_card.power
-                                self.grid[row][col-1] = None
+                                #self.grid[row][col-1] = None
                                 grid_card.hunger = 4
                             elif right_card is not None and right_card.type == card.Card.Type.prey:
+                                right_card.getting_eaten = True
                                 grid_card.power = grid_card.power + right_card.power
-                                self.grid[row][col+1] = None
+                                #self.grid[row][col+1] = None
                                 grid_card.hunger = 4
                         
                         if grid_card.hunger == 0:
@@ -109,4 +110,5 @@ class Board:
                 
                 if self.grid[row][col] is not None and not self.grid[row][col].is_dead:
                     self.grid[row][col].display_card(rel_x, rel_y, card_width, False, screen)
-
+                    if self.grid[row][col].getting_eaten:
+                        print(self.grid[row][col].name + " is getting eaten")

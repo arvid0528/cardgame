@@ -25,11 +25,7 @@ class Card:
 
     def __str__(self):
         return self.name + " " + self.type + " C:" + str(self.cost) + " P:" + str(self.power)
-
-
-    def get_eaten(self):
-        self.getting_eaten = True
-        
+    
 
     def display_card(self, pos_x, pos_y, width, selected, screen):
         self.x = pos_x
@@ -81,7 +77,9 @@ class Card:
         screen.blit(type, (pos_x + width/2 - type_w/2, pos_y + height - height*0.1 - type_h/2))
 
         if self.getting_eaten:
+            print("getting eaten")
             pygame.draw.rect(screen, (255,0,0), (self.x, self.y+self.height*0.7, self.width/2, self.height*0.3))
+            self.name = "Eaten"
             if self.death_animation_timer > 60:
                 self.is_dead = True
                 self.getting_eaten = False
