@@ -90,6 +90,7 @@ class Board:
 
         for row in range(self.rows):
             for col in range(self.cols):
+                
                 rel_x = pos_x + card_width*1.1*col
                 rel_y = pos_y + card_height*1.1*row
                 if mouse_x > rel_x and mouse_x < rel_x + card_width and mouse_y > rel_y and mouse_y < rel_y + card_height:
@@ -106,6 +107,6 @@ class Board:
                 else:
                     pygame.draw.rect(screen, (100,100,100), (rel_x, rel_y, card_width, card_height))
                 
-                if self.grid[row][col] is not None:
+                if self.grid[row][col] is not None and not self.grid[row][col].is_dead:
                     self.grid[row][col].display_card(rel_x, rel_y, card_width, False, screen)
 

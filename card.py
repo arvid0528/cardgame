@@ -11,21 +11,25 @@ class Card:
         tool = "Tool"
         mystical = "Mystical"
 
+
     def __init__(self, name: str, type: Type, hunger: int, power: int, player_card: bool):
         self.name = name
         self.hunger = hunger
         self.power = power
         self.type = type
         self.player_card = player_card
+        self.getting_eaten = False
+        self.death_animation_timer = 0
+        self.is_dead = False
+
 
     def __str__(self):
         return self.name + " " + self.type + " C:" + str(self.cost) + " P:" + str(self.power)
 
-    def eaten_animation(self, screen):
-        #self.display_card(self.x, self.y, self.width, False, screen)
-        pygame.draw.rect(screen, (255,0,0), (self.x, self.y+self.height*0.7, self.width/2, self.height*0.3))
-        time.sleep(1)
 
+    def get_eaten(self):
+        self.getting_eaten = True
+        
 
     def display_card(self, pos_x, pos_y, width, selected, screen):
         self.x = pos_x
@@ -75,3 +79,13 @@ class Card:
         type_w, type_h = type_font.size(self.type)
         pygame.draw.rect(screen, (255,255,255), (pos_x+width*0.1/2, pos_y + height - height*0.1 - type_h/2, width*0.9, type_h))
         screen.blit(type, (pos_x + width/2 - type_w/2, pos_y + height - height*0.1 - type_h/2))
+
+        if self.getting_eaten:
+            pygame.draw.rect(screen, (255,0,0), (self.x, self.y+self.height*0.7, self.width/2, self.height*0.3))
+            if self.death_animation_timer > 60:
+                self.is_dead = True
+                self.getting_eaten = False
+            self.death_animation_timer += 1
+            
+
+
